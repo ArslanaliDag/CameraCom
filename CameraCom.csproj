@@ -67,10 +67,14 @@
       <DependentUpon>CameraForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="README.MD" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CameraCom.snk" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
