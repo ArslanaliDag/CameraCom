@@ -1,0 +1,13 @@
+D:\CameraCom\bin\Debug\CameraCom.dll
+D:\CameraCom\bin\Debug\CameraCom.pdb
+D:\CameraCom\bin\Debug\AForge.dll
+D:\CameraCom\bin\Debug\AForge.Video.DirectShow.dll
+D:\CameraCom\bin\Debug\AForge.Video.dll
+D:\CameraCom\bin\Debug\AForge.xml
+D:\CameraCom\bin\Debug\AForge.Video.xml
+D:\CameraCom\bin\Debug\AForge.Video.DirectShow.xml
+D:\CameraCom\obj\Debug\CameraCom.csproj.AssemblyReference.cache
+D:\CameraCom\obj\Debug\CameraCom.csproj.CoreCompileInputs.cache
+D:\CameraCom\obj\Debug\CameraCom.csproj.Up2Date
+D:\CameraCom\obj\Debug\CameraCom.dll
+D:\CameraCom\obj\Debug\CameraCom.pdb
