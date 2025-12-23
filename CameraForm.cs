@@ -36,21 +36,6 @@ namespace CameraCom
             cmbResolution.SelectedIndex = 0;
         }
 
-        //private void btnStart_Click(object sender, EventArgs e)
-        //{
-        //    if (_camera != null && _camera.IsRunning)
-        //        _camera.SignalToStop();
-
-        //    var device = (FilterInfo)cmbCameras.SelectedItem;
-        //    _camera = new VideoCaptureDevice(device.MonikerString);
-
-        //    if (cmbResolution.SelectedIndex >= 0)
-        //        _camera.VideoResolution = _camera.VideoCapabilities[cmbResolution.SelectedIndex];
-
-        //    _camera.NewFrame += Camera_NewFrame;
-        //    _camera.Start();
-        //}
-
         private void Camera_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             _currentFrame?.Dispose();
