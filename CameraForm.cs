@@ -1,8 +1,15 @@
 ﻿using System;
 using System.Drawing;
+using System.Net.Http.Headers;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using AForge.Video;
 using AForge.Video.DirectShow;
+
+
+// Тут последние ответы показывают как взаимодействовать с бэкендом отправляя фото как байты
+// https://chat.deepseek.com/share/b9wyjobsbobbe5djx1
 
 namespace CameraCom
 {
@@ -50,23 +57,43 @@ namespace CameraCom
             LoadResolutions();
         }
 
-        private void btnPhoto_Click(object sender, EventArgs e)
+        //private void btnPhoto_Click(object sender, EventArgs e)
+        //{
+        //    if (_currentFrame == null)
+        //        return;
+
+        //    using (var dlg = new SaveFileDialog
+        //    {
+        //        Filter = "JPEG (*.jpg)|*.jpg|PNG (*.png)|*.png"
+        //    })
+        //    {
+        //        if (dlg.ShowDialog() == DialogResult.OK)
+        //        {
+        //            _currentFrame.Save(dlg.FileName);
+        //            SavedFilePath = dlg.FileName;
+        //            DialogResult = DialogResult.OK;
+        //            Close();
+        //        }
+        //    }
+        //}
+        private async void btnPhoto_Click(object sender, EventArgs e)
         {
             if (_currentFrame == null)
                 return;
 
-            using (var dlg = new SaveFileDialog
+            try
             {
-                Filter = "JPEG (*.jpg)|*.jpg|PNG (*.png)|*.png"
-            })
+                btnPhoto.Enabled = false;
+
+                string json = await UploadPhotoAsync(_currentFrame);
+
+                SavedFilePath = json; // теперь тут JSON
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch (Exception ex)
             {
-                if (dlg.ShowDialog() == DialogResult.OK)
-                {
-                    _currentFrame.Save(dlg.FileName);
-                    SavedFilePath = dlg.FileName;
-                    DialogResult = DialogResult.OK;
-                    Close();
-                }
+                MessageBox.Show("Ошибка загрузки: " + ex.Message);
             }
         }
 
@@ -96,5 +123,30 @@ namespace CameraCom
             _camera.Start();
         }
 
+        private async Task<string> UploadPhotoAsync(Bitmap bitmap)
+        {
+            using (var client = new HttpClient())
+            using (var ms = new System.IO.MemoryStream())
+            {
+                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                ms.Position = 0;
+
+                var content = new MultipartFormDataContent();
+
+                var imageContent = new ByteArrayContent(ms.ToArray());
+                imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+
+                content.Add(imageContent, "file", "photo.jpg");
+
+                var response = await client.PostAsync(
+                    "http://192.168.30.171:8010/api/v1/upload",
+                    content
+                );
+
+                response.EnsureSuccessStatusCode();
+
+                return await response.Content.ReadAsStringAsync();
+            }
+        }
     }
 }
